@@ -134,8 +134,15 @@ const show = computed(() => auth.ready.value && !auth.isAuthed.value)
         </UForm>
       </UCard>
 
-      <p class="mt-5 text-center text-xs text-zinc-500">
-        Open-source • Laravel + Nuxt • Apache 2.0
+      <NuxtLink
+        to="/legal"
+        class="mt-2 block text-center text-xs text-zinc-500 transition hover:text-zinc-300"
+      >
+        Al crear tu cuenta aceptas los <span class="underline">términos de uso</span> y la <span class="underline">política de privacidad</span>.
+      </NuxtLink>
+
+      <p class="mt-4 text-center text-xs text-zinc-500">
+        Open-source (MIT) · Laravel + Nuxt
       </p>
     </div>
   </div>

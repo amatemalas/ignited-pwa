@@ -1,64 +1,99 @@
-# Nuxt Starter Template
+# Ignited
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+> Tu música, sin suscripciones.
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+**Ignited** es un reproductor de música web **open-source** construido con **Nuxt 4**. Busca en el catálogo
+Creative Commons de **Jamendo** y, en instancias configuradas para ello, en **YouTube Music** (vía Piped + yt-dlp).
+Incluye cuenta de usuario, playlists, importación de listas desde YouTube Music, historial de reproducción,
+*Media Session API* (controles desde la pantalla de bloqueo) y funciona como **PWA** instalable.
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+- **Frontend:** este repositorio (Nuxt 4 + Vue 3 + TypeScript + Tailwind CSS v4 + Nuxt UI).
+- **Backend:** API REST separada en **Laravel** (repositorio `ignited-api`).
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+## Características
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+- 🔍 Búsqueda unificada en catálogos abiertos (Jamendo / Creative Commons y, si está habilitado, YouTube Music).
+- 👤 Registro, login y sesión persistente (token en `localStorage`).
+- 💿 Playlists con carátula automática, creación, edición y eliminación de pistas.
+- 📥 Importar playlists desde YouTube Music (enlace público o CSV de Google Takeout).
+- 🕘 Historial de reproducción.
+- 🎧 Media Session: controles desde la pantalla de bloqueo / barra del sistema.
+- 📱 PWA instalable con soporte offline del shell (workbox, `installPrompt`, mascable + 192/512 icons).
 
-## Quick Start
+## Stack
 
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
+| Capa | Tecnología |
+|---|---|
+| Framework | Nuxt 4 (Vue 3, TypeScript), modo SPA (`ssr: false`) |
+| UI | Nuxt UI v4 + Tailwind CSS v4 |
+| PWA | `@vite-pwa/nuxt` (manifest + workbox offline) |
+| Datos | API REST (Laravel) vía `useApi()` |
+| CI | GitHub Actions: lint/typecheck + deploy a Hostinger (FTP) |
+
+## Estructura
+
+```
+app/
+  components/    UI (PlayerBar, TrackRow, AuthGate, PlaylistImportModal, …)
+  composables/   useApi, useAuth, useLibrary, usePlayer, usePlaylistImport
+  pages/         index (búsqueda), library, playlists/[id], now-playing, legal
 ```
 
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
-
-## Setup
-
-Make sure to install the dependencies:
+## Desarrollo local
 
 ```bash
 pnpm install
+pnpm dev        # http://localhost:3000
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Configura la API en `.env` (copia de `.env.example`):
 
 ```bash
-pnpm dev
+NUXT_PUBLIC_API_BASE_URL=http://ignited-api.test/api
+NUXT_PUBLIC_ALLOW_YOUTUBE=true   # habilita resultados de YouTube/Piped
 ```
 
-## Production
+> `NUXT_PUBLIC_ALLOW_YOUTUBE` se incrusta en el build. Por defecto está **desactivado** (seguro): la instancia
+> generada solo ofrece el catálogo Creative Commons de Jamendo. Actívalo solo si el operador asume los términos
+> de servicio de las plataformas de origen.
 
-Build the application for production:
+## Build y despliegue (Hostinger, estático)
 
 ```bash
-pnpm build
+pnpm generate                  # genera .output/public (index.html + 404.html)
 ```
 
-Locally preview production build:
+El hosting estático de Hostinger se configura con el `.htaccess` incluido en `public/`, que sirve el shell de la
+app para rutas profundas (`ErrorDocument 404 /404.html`), de modo que funcione la navegación SPA.
 
-```bash
-pnpm preview
-```
+El deploy se hace desde GitHub Actions (workflows `.github/workflows/deploy*.yml`), que ejecutan
+`pnpm generate` y suben `.output/public/` por FTP, igual que el resto de proyectos del autor.
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+### Variables y secretos (GitHub)
 
-## Renovate integration
+| Nombre | Tipo | Descripción |
+|---|---|---|
+| `API_BASE_URL` | Variable | URL pública de la API, p. ej. `https://tu-api.com/api` |
+| `ALLOW_YOUTUBE` | Variable | `true`/`false` para la rama objetivo |
+| `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD` | Secret | Credenciales FTP de Hostinger (rama principal) |
+| `FTP_HOST_DEV`, `FTP_USERNAME_DEV`, `FTP_PASSWORD_DEV` | Secret | Credenciales FTP del dev ring (rama `develop`) |
 
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+Ramas: `main` → producción, `develop` → dev ring.
+
+## PWA
+
+- Manifest con nombre, temas `#0c0c14` e iconos 192/512/mascable.
+- Service worker con precaché del shell, actualización automática (`registerType: 'autoUpdate'`) y caché
+  `CacheFirst` para carátulas (90 días).
+- Instalable en Android/iOS/Desktop (aviso de instalación nativo).
+
+## Legal
+
+Antes de abrir una instancia al público revisa `app/pages/legal.vue` (términos de uso, privacidad RGPD y fuentes
+de contenido) y adapta los datos de contacto y la URL de la instancia. Si expones YouTube públicamente, asume el
+riesgo de los términos de servicio de la plataforma de origen; la opción más segura para una instancia abierta es
+mantener solo catálogos Creative Commons.
+
+## Licencia
+
+[MIT](LICENSE) © 2026 amatemalas. Derivado del Nuxt UI Starter Template (MIT © Nuxt UI Templates).

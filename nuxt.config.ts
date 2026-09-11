@@ -1,10 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
     '@vite-pwa/nuxt'
   ],
+  ssr: false,
 
   devtools: { enabled: false },
 
@@ -29,7 +31,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api',
+      // Si es false, la instancia pública no muestra resultados de YouTube/Piped
+      // (solo catálogo Creative Commons de Jamendo).
+      allowYouTube: process.env.NUXT_PUBLIC_ALLOW_YOUTUBE === 'true'
     }
   },
 

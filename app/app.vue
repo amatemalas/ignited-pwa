@@ -114,15 +114,23 @@ const navItems = [
           </p>
         </div>
 
-        <div class="flex items-center justify-between border-t border-white/10 px-5 py-3">
-          <button
-            type="button"
-            class="text-xs text-zinc-500 transition hover:text-white"
-            @click="auth.logout()"
+        <div class="border-t border-white/10 px-5 py-3">
+          <div class="flex items-center justify-between">
+            <button
+              type="button"
+              class="text-xs text-zinc-500 transition hover:text-white"
+              @click="auth.logout()"
+            >
+              Cerrar sesión
+            </button>
+            <span class="text-[10px] text-zinc-600">{{ auth.user.value?.name ?? '' }}</span>
+          </div>
+          <NuxtLink
+            to="/legal"
+            class="mt-2 block text-[11px] text-zinc-500 transition hover:text-white"
           >
-            Cerrar sesión
-          </button>
-          <span class="text-[10px] text-zinc-600">{{ auth.user.value?.name ?? '' }}</span>
+            Legal y privacidad
+          </NuxtLink>
         </div>
       </aside>
 
@@ -157,6 +165,18 @@ const navItems = [
               class="size-4"
             />
           </button>
+          <button
+            type="button"
+            class="grid size-9 place-items-center rounded-lg text-zinc-400"
+            :class="route.path === '/legal' ? 'grad-fill text-white' : ''"
+            aria-label="Legal y privacidad"
+            @click="navigateTo('/legal')"
+          >
+            <UIcon
+              name="i-lucide-scale"
+              class="size-4"
+            />
+          </button>
         </div>
       </header>
 
@@ -171,7 +191,7 @@ const navItems = [
       </main>
 
       <PlayerBar v-if="!nowPlayingFullscreen" />
-      <AuthGate />
+      <AuthGate v-if="route.path !== '/legal'" />
     </div>
   </UApp>
 </template>

@@ -4,6 +4,9 @@ import type { SearchResult, SourceStatus } from '~/types'
 const api = useApi()
 const library = useLibrary()
 const toast = useToast()
+const config = useRuntimeConfig()
+
+const allowYouTube = config.public.allowYouTube
 
 const query = ref('')
 const results = ref<SearchResult[]>([])
@@ -33,8 +36,9 @@ const doSearch = async () => {
   hasSearched.value = true
   try {
     const data = await api.request<{ results: SearchResult[] }>(`/search?q=${encodeURIComponent(q)}&limit=20`)
-    results.value = data.results
-    if (data.results.length === 0) {
+    const all = data.results
+    results.value = allowYouTube ? all : all.filter(r => r.provider !== 'piped')
+    if (results.value.length === 0) {
       toast.add({ title: 'Sin resultados', description: 'Prueba con otro término de búsqueda.', color: 'neutral' })
     }
   } catch (e) {
@@ -79,7 +83,7 @@ const playAll = async () => {
         <span class="grad-text">sin suscripciones</span>.
       </h1>
       <p class="mt-2 max-w-lg text-zinc-400">
-        Busca en todo el catálogo abierto: YouTube Music y el catálogo Creative Commons de Jamendo.
+        Busca en todo el catálogo abierto: {{ allowYouTube ? 'YouTube Music y el catálogo Creative Commons de Jamendo.' : 'el catálogo Creative Commons de Jamendo.' }}
       </p>
 
       <div class="relative mt-6 max-w-2xl">
@@ -104,7 +108,10 @@ const playAll = async () => {
 
       <!-- Source status -->
       <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px] text-zinc-500">
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1">
+        <span
+          v-if="allowYouTube"
+          class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1"
+        >
           <span
             class="size-1.5 rounded-full"
             :class="status?.piped.search_ok ? 'bg-emerald-400' : 'bg-ember-500'"

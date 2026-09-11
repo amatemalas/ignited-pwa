@@ -1,0 +1,14 @@
+# SPA fallback: las rutas profundas (/playlists/123, /library) sirven el shell
+# de la app y el router de Vue las gestiona en el cliente.
+ErrorDocument 404 /404.html
+
+Options -Indexes
+
+# Cache larga para assets con hash de contenido
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
