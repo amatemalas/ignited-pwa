@@ -1,0 +1,277 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: 'Public Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-night-950: #0c0c14;
+  --color-night-900: #12121d;
+  --color-night-850: #171724;
+  --color-night-800: #1d1d2b;
+  --color-night-700: #2a2a3c;
+
+  --color-brand-300: #c4a2ff;
+  --color-brand-400: #b06cff;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+
+  --color-ember-400: #ff9d66;
+  --color-ember-500: #ff6d2e;
+}
+
+html, body, #__nuxt {
+  min-height: 100vh;
+  background: var(--color-night-950);
+}
+
+body {
+  color: var(--color-zinc-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+.color-scheme-dark {
+  color-scheme: dark;
+}
+
+/* --- Vidrio / aurora --- */
+.glass {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-strong {
+  background: rgba(18, 18, 29, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* --- Acrílico (superficies flotantes tipo macOS) --- */
+.acrylic {
+  border-radius: 1rem;
+  background:
+    radial-gradient(130% 115% at 0% 0%, rgba(255, 255, 255, 0.14), transparent 46%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02) 55%, rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(26px) saturate(175%);
+  -webkit-backdrop-filter: blur(26px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 24px 70px -18px rgba(2, 2, 10, 0.7);
+}
+
+/* Panel diálogo: cristal con luz superior */
+[data-slot="content"][role="dialog"] {
+  border-radius: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background:
+    radial-gradient(135% 115% at 0% 0%, rgba(255, 255, 255, 0.13), transparent 48%),
+    linear-gradient(160deg, rgba(40, 40, 58, 0.6), rgba(16, 16, 26, 0.58) 60%, rgba(14, 14, 23, 0.5));
+  backdrop-filter: blur(34px) saturate(185%);
+  -webkit-backdrop-filter: blur(34px) saturate(185%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 34px 90px -22px rgba(2, 2, 10, 0.8);
+}
+
+/* La tarjeta interna del diálogo se vuelve transparente: el panel es el cristal */
+[data-slot="content"][role="dialog"] [data-slot="root"] {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Overlay: tenue + difumina para que la aurora se vea a través */
+[data-slot="overlay"] {
+  background: linear-gradient(180deg, rgba(8, 8, 16, 0.42), rgba(10, 10, 18, 0.34));
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+}
+
+/* Dropdown/popover: cristal */
+[data-slot="content"][role="menu"],
+[data-slot="content"][role="listbox"] {
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(125% 105% at 0% 0%, rgba(255, 255, 255, 0.12), transparent 50%),
+    linear-gradient(160deg, rgba(34, 34, 50, 0.78), rgba(16, 16, 26, 0.7));
+  backdrop-filter: blur(26px) saturate(175%);
+  -webkit-backdrop-filter: blur(26px) saturate(175%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 20px 50px -14px rgba(2, 2, 10, 0.65);
+}
+
+/* Inputs / textarea: cristal fino */
+input[data-slot="base"],
+textarea[data-slot="base"] {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.65rem;
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03) 55%, rgba(255, 255, 255, 0.01));
+  backdrop-filter: blur(14px) saturate(175%);
+  -webkit-backdrop-filter: blur(14px) saturate(175%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+input[data-slot="base"]::placeholder,
+textarea[data-slot="base"]::placeholder {
+  color: rgba(216, 216, 225, 0.4);
+}
+
+input[data-slot="base"]:focus-visible,
+textarea[data-slot="base"]:focus-visible {
+  border-color: rgba(196, 162, 255, 0.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 3px rgba(139, 92, 246, 0.28);
+}
+
+.grad-text {
+  background: linear-gradient(120deg, #c4a2ff 0%, #8b5cf6 35%, #ff6d2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grad-fill {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ff6d2e 100%);
+}
+
+.bg-aurora {
+  background:
+    radial-gradient(40rem 40rem at 15% -10%, rgba(139, 92, 246, 0.22), transparent 60%),
+    radial-gradient(36rem 36rem at 110% 0%, rgba(255, 109, 46, 0.16), transparent 55%),
+    radial-gradient(30rem 30rem at 50% 120%, rgba(176, 108, 255, 0.12), transparent 60%);
+}
+
+.art-glow {
+  box-shadow: 0 14px 44px -14px rgba(139, 92, 246, 0.55);
+}
+
+/* Overlay de autenticación: la app queda desenfocada tras la aurora */
+.auth-overlay {
+  background:
+    radial-gradient(40rem 40rem at 15% -10%, rgba(139, 92, 246, 0.22), transparent 60%),
+    radial-gradient(36rem 36rem at 110% 0%, rgba(255, 109, 46, 0.16), transparent 55%),
+    radial-gradient(30rem 30rem at 50% 120%, rgba(176, 108, 255, 0.12), transparent 60%),
+    rgba(8, 8, 16, 0.6);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+/* Tarjeta de autenticación: superficie sólida sobre el fondo difuminado */
+.auth-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, #171724 0%, #12121d 60%, #0f0f19 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 70px -18px rgba(2, 2, 10, 0.8);
+}
+
+/* --- Scrollbar --- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(176, 108, 255, 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(176, 108, 255, 0.35);
+  border-radius: 999px;
+}
+
+/* --- Animar la portada actual --- */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 9s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 14s linear infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* --- Ecualizador del elemento en reproducción --- */
+@keyframes equalize {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.equalizer-bar {
+  transform-origin: bottom;
+  animation: equalize 0.9s ease-in-out infinite;
+}
+
+/* --- Giradiscos del "en reproducción" --- */
+@keyframes disc-in {
+  from { opacity: 0; transform: scale(0.88) rotate(-10deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.animate-disc-in {
+  animation: disc-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.vinyl {
+  background:
+    repeating-radial-gradient(circle at center,
+      rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px, transparent 4px),
+    radial-gradient(circle at 38% 28%, #26263c 0%, #13131e 42%, #0a0a12 78%, #05050a 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 -18px 38px -12px rgba(0, 0, 0, 0.7),
+    0 30px 70px -22px rgba(0, 0, 0, 0.85);
+}
+
+.vinyl-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    conic-gradient(from 12deg,
+      transparent 24deg,
+      rgba(255, 255, 255, 0.13) 46deg,
+      rgba(255, 255, 255, 0.02) 120deg,
+      rgba(255, 255, 255, 0.07) 176deg,
+      rgba(255, 255, 255, 0.11) 208deg,
+      transparent 300deg);
+  animation: spin-slow 7s linear infinite;
+}
+
+.vinyl-paused {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl-sheen,
+  .equalizer-bar,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+}
