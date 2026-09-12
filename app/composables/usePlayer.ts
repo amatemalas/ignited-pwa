@@ -254,6 +254,21 @@ function playList(tracks: Track[], startIndex: number) {
   }
 }
 
+function playShuffled(tracks: Track[]) {
+  if (!audio || tracks.length === 0) return
+  queue.value = tracks
+  isShuffling.value = true
+  shuffleOrder.value = shuffleArray(tracks.map((_, i) => i))
+  currentIndex.value = shuffleOrder.value[0] ?? -1
+  const first = tracks[currentIndex.value]
+  if (first) {
+    void loadTrack(first)
+    if (import.meta.client) {
+      useApi().request('/history', { method: 'POST', body: { track_id: first.id } }).catch(() => {})
+    }
+  }
+}
+
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
@@ -402,6 +417,7 @@ export function usePlayer() {
     isCurrent,
     play,
     playList,
+    playShuffled,
     playAt,
     toggle,
     next,

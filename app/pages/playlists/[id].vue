@@ -43,7 +43,7 @@ const trackToResult = (track: Track) => ({
 
 const playAll = () => {
   const tracks = playlist.value?.tracks ?? []
-  if (tracks.length) void player.playList(tracks, 0)
+  if (tracks.length) player.playShuffled(tracks)
 }
 
 const playTrack = (track: Track) => {
