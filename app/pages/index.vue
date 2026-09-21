@@ -118,6 +118,16 @@ const playAll = async () => {
           />
           Piped
         </span>
+        <span
+          v-if="allowYouTube"
+          class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1"
+        >
+          <span
+            class="size-1.5 rounded-full"
+            :class="status?.invidious.search_ok ? 'bg-emerald-400' : 'bg-ember-500'"
+          />
+          Invidious
+        </span>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1">
           <span
             class="size-1.5 rounded-full"

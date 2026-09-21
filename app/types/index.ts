@@ -40,6 +40,7 @@ export interface Playlist {
 
 export interface SourceStatus {
   piped: { search_ok: boolean, instance: string | null }
+  invidious: { search_ok: boolean, instance: string | null }
   ytdlp: { installed: boolean }
   jamendo: { configured: boolean }
 }
